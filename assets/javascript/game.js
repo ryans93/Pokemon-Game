@@ -1,7 +1,15 @@
 var playerTeam;
 var oppTeam;
+var oppName;
 var playerActive;
 var oppActive;
+var music = document.createElement("audio");
+music.setAttribute("src", "assets/music/battleTheme.mp3");
+music.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+
 $("document").ready(function () {
 
     //begin trainer object declarations
@@ -750,12 +758,14 @@ $("document").ready(function () {
     $("#redButton").on("click", function () {
         playerTeam = red;
         oppTeam = blue;
+        oppName="Blue";
         start();
     })
 
     $("#blueButton").on("click", function () {
         playerTeam = blue;
         oppTeam = red;
+        oppName="Red";
         start();
     })
 
@@ -763,7 +773,8 @@ $("document").ready(function () {
         $("#redButton").remove();
         $("#blueButton").remove();
         $('.btn-group').attr('id', 'menu');
-        $("#log").append("</br>Select a pokemon to send out.")
+        $("#log").append("</br>Pokemon Trainer "+oppName+" challenges you to a battle!</br>Select a pokemon to send out.")
+        music.play();
         selectPokemon();
     }
 
