@@ -5,7 +5,7 @@ var playerActive;
 var oppActive;
 var music = document.createElement("audio");
 music.setAttribute("src", "assets/music/battleTheme.mp3");
-music.addEventListener('ended', function() {
+music.addEventListener('ended', function () {
     this.currentTime = 0;
     this.play();
 }, false);
@@ -22,7 +22,7 @@ $("document").ready(function () {
             resistances: ["Electric", "Flying", "Steel"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [180, 180, 252, 93, 230, 115, 203],
             status: "",
             imageFront: "assets/images/pikachu-front.gif",
             imageBack: "assets/images/pikachu-back.gif",
@@ -44,7 +44,7 @@ $("document").ready(function () {
                     }
                 },
                 {
-                    name: "",
+                    name: "Quick Attack",
                     type: ["Normal", "Physical"],
                     power: 40,
                     accuracy: 100,
@@ -83,7 +83,7 @@ $("document").ready(function () {
             resistances: ["Water", "Flying", "Steel"],
             doubleResistances: ["Ice"],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [370, 370, 192, 181, 192, 214, 137],
             status: "",
             imageFront: "assets/images/lapras-front.gif",
             imageBack: "assets/images/lapras-back.gif",
@@ -144,7 +144,7 @@ $("document").ready(function () {
             resistances: [""],
             doubleResistances: [""],
             immunities: ["Ghost"],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [430, 430, 247, 148, 148, 247, 71],
             status: "",
             imageFront: "assets/images/snorlax-front.gif",
             imageBack: "assets/images/snorlax-back.gif",
@@ -159,7 +159,7 @@ $("document").ready(function () {
                     name: "Toxic",
                     type: ["Poison", "-"],
                     power: 0,
-                    accuracy: 100,
+                    accuracy: 90,
                     priority: 0,
                     effect: function () {
 
@@ -205,7 +205,7 @@ $("document").ready(function () {
             resistances: ["Electric", "Water", "Fighting", "Fairy"],
             doubleResistances: ["Grass"],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [270, 270, 185, 188, 225, 225, 181],
             status: "",
             imageFront: "assets/images/venusaur-front.gif",
             imageBack: "assets/images/venusaur-back.gif",
@@ -266,7 +266,7 @@ $("document").ready(function () {
             resistances: ["Fire", "Fighting", "Steel", "Fairy"],
             doubleResistances: ["Grass", "Bug"],
             immunities: ["Ground"],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [266, 266, 190, 177, 245, 192, 225],
             status: "",
             imageFront: "assets/images/charizard-front.gif",
             imageBack: "assets/images/charizard-back.gif",
@@ -289,7 +289,7 @@ $("document").ready(function () {
                 },
                 {
                     name: "Air Slash",
-                    type: ["Flying", ""],
+                    type: ["Flying", "Special"],
                     power: 75,
                     accuracy: 95,
                     priority: 0,
@@ -300,8 +300,8 @@ $("document").ready(function () {
                 {
                     name: "Focus Blast",
                     type: ["Fighting", "Special"],
-                    power: 0,
-                    accuracy: 0,
+                    power: 120,
+                    accuracy: 70,
                     priority: 0,
                     effect: function () {
 
@@ -327,7 +327,7 @@ $("document").ready(function () {
             resistances: ["Fire", "Water", "Steel", "Ice"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [268, 268, 188, 225, 192, 236, 177],
             status: "",
             imageFront: "assets/images/blastoise-front.gif",
             imageBack: "assets/images/blastoise-back.gif",
@@ -393,7 +393,7 @@ $("document").ready(function () {
             resistances: ["Fighting", "Psychic"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [220, 220, 115, 104, 302, 214, 269],
             status: "",
             imageFront: "assets/images/alakazam-front.gif",
             imageBack: "assets/images/alakazam-back.gif",
@@ -405,40 +405,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Psychic",
+                    type: ["Psychic", "Special"],
+                    power: 90,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Shadow Ball",
+                    type: ["Ghost", "Special"],
+                    power: 80,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Future Sight",
+                    type: ["Psychic", "Special"],
+                    power: 120,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
+                    name: "Reflect",
+                    type: ["Psychic", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: "-",
                     priority: 0,
                     effect: function () {
 
@@ -454,7 +454,7 @@ $("document").ready(function () {
             resistances: ["Bug", "Rock", "Dark"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [290, 290, 291, 181, 148, 192, 126],
             status: "",
             imageFront: "assets/images/machamp-front.gif",
             imageBack: "assets/images/machamp-back.gif",
@@ -466,40 +466,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Cross Chop",
+                    type: ["Fighting", "Physical"],
+                    power: 100,
+                    accuracy: 80,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
+                    name: "Bulk Up",
+                    type: ["Fighting", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: "-",
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Knock Off",
+                    type: ["Dark", "Physical"],
+                    power: 65,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Poison Jab",
+                    type: ["Poison", "Physical"],
+                    power: 80,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
@@ -515,7 +515,7 @@ $("document").ready(function () {
             resistances: ["Normal", "Fire", "Poison", "Flying", "Bug"],
             doubleResistances: [""],
             immunities: ["Ground"],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [270, 270, 236, 148, 137, 170, 291],
             status: "",
             imageFront: "assets/images/aerodactyl-front.gif",
             imageBack: "assets/images/aerodactyl-back.gif",
@@ -527,40 +527,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Rock Slide",
+                    type: ["Rock", "Physical"],
+                    power: 75,
+                    accuracy: 90,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Crunch",
+                    type: ["Dark", "Physical"],
+                    power: 80,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Iron Head",
+                    type: ["Steel", "Physical"],
+                    power: 80,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Sky Drop",
+                    type: ["Flying", "Physical"],
+                    power: 60,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
@@ -576,7 +576,7 @@ $("document").ready(function () {
             resistances: ["Electric", "Water", "Grass", "Fighting", "Ground", "Psychic"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [300, 300, 214, 192, 280, 170, 126],
             status: "",
             imageFront: "assets/images/exeggutor-front.gif",
             imageBack: "assets/images/exeggutor-back.gif",
@@ -588,40 +588,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Leaf Storm",
+                    type: ["Grass", "Special"],
+                    power: 130,
+                    accuracy: 90,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Psychic",
+                    type: ["Psychic", "Special"],
+                    power: 90,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Sludge Bomb",
+                    type: ["Poison", "Special"],
+                    power: 90,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
+                    name: "Hypnosis",
+                    type: ["Psychic", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: 60,
                     priority: 0,
                     effect: function () {
 
@@ -637,7 +637,7 @@ $("document").ready(function () {
             resistances: ["Fire", "Grass", "Ice", "Bug", "Fairy", "Steel"],
             doubleResistances: [""],
             immunities: [""],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [290, 290, 247, 181, 225, 181, 214],
             status: "",
             imageFront: "assets/images/arcanine-front.gif",
             imageBack: "assets/images/arcanine-back.gif",
@@ -649,40 +649,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Extreme Speed",
+                    type: ["Normal", "Physical"],
+                    power: 80,
+                    accuracy: 100,
+                    priority: 1,
+                    effect: function () {
+
+                    }
+                },
+                {
+                    name: "Flare Blitz",
+                    type: ["Fire", "Physical"],
+                    power: 120,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Thunder Fang",
+                    type: ["Electric", "Physical"],
+                    power: 65,
+                    accuracy: 95,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Bulldoze",
+                    type: ["Ground", "Physical"],
+                    power: 60,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
@@ -698,7 +698,7 @@ $("document").ready(function () {
             resistances: ["Fire", "Water", "Steel", "Fighting", "Bug"],
             doubleResistances: [""],
             immunities: ["Ground"],
-            stats: [0, 0, 0, 0, 0, 0],
+            stats: [300, 300, 280, 179, 137, 225, 183],
             status: "",
             imageFront: "assets/images/gyarados-front.gif",
             imageBack: "assets/images/gyarados-back.gif",
@@ -710,40 +710,40 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Aqua Tail",
+                    type: ["Water", "Physical"],
+                    power: 90,
+                    accuracy: 90,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Crunch",
+                    type: ["Dark", "Physical"],
+                    power: 80,
+                    accuracy: 100,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
-                    power: 0,
-                    accuracy: 0,
+                    name: "Ice Fang",
+                    type: ["Ice", "Physical"],
+                    power: 65,
+                    accuracy: 95,
                     priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: ["", ""],
+                    name: "Dragon Dance",
+                    type: ["Dragon", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: "-",
                     priority: 0,
                     effect: function () {
 
@@ -758,28 +758,61 @@ $("document").ready(function () {
     $("#redButton").on("click", function () {
         playerTeam = red;
         oppTeam = blue;
-        oppName="Blue";
-        start();
+        oppName = "Blue";
+        initialize();
     })
 
     $("#blueButton").on("click", function () {
         playerTeam = blue;
         oppTeam = red;
-        oppName="Red";
-        start();
+        oppName = "Red";
+        initialize();
     })
 
-    function start() {
+    function initialize() {
         $("#redButton").remove();
         $("#blueButton").remove();
+        $("#mainDisplay").append("<div class=col-xs-2 id=oppTrainerSpriteBox>");
+        if (oppName === "Red") {
+            $('#oppTrainerSpriteBox').css({
+                "background-image": "url(assets/images/red.png)",
+                "background-size": "50% 100%",
+                "background-repeat": "no-repeat"
+            });
+        }
+        else {
+            $('#oppTrainerSpriteBox').css({
+                "background-image": "url(assets/images/blue.png)",
+                "background-size": "50% 100%",
+                "background-repeat": "no-repeat"
+            });
+        }
         $('.btn-group').attr('id', 'menu');
-        $("#log").append("</br>Pokemon Trainer "+oppName+" challenges you to a battle!</br>Select a pokemon to send out.")
+        $("#log").html("");
+        $("#log").append("Pokemon Trainer " + oppName + " challenges you to a battle!");
         music.play();
-        selectPokemon();
+        setTimeout(function () {
+            $("#log").append("</br>Select a pokemon to send out.");
+            selectPokemon();
+        }, 3500);
     }
 
     function selectPokemon() {
-        $("#mainDisplay").append("<div class=col-xs-2 id=selectBox>");
+        $("#mainDisplay").append("<div class=col-xs-3 id=selectBox>");
+        $("#selectBox").append("<button class=pokemon-button id=firstPokemon>");
+        $("#firstPokemon").html(playerTeam[0].name);
+        $("#selectBox").append("<button class=pokemon-button id=secondPokemon>");
+        $("#secondPokemon").html(playerTeam[1].name);
+        $("#selectBox").append("<button class=pokemon-button id=thirdPokemon>");
+        $("#thirdPokemon").html(playerTeam[2].name);
+        $("#selectBox").append("<button class=pokemon-button id=fourthPokemon>");
+        $("#fourthPokemon").html(playerTeam[3].name);
+        $("#selectBox").append("<button class=pokemon-button id=fifthPokemon>");
+        $("#fifthPokemon").html(playerTeam[4].name);
+        $("#selectBox").append("<button class=pokemon-button id=sixthPokemon>");
+        $("#sixthPokemon").html(playerTeam[5].name);
+        $("#selectBox").append("<button class=pokemon-button id=cancel>");
+        $("#cancel").html("Cancel");
     }
 
 })
