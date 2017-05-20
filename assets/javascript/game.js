@@ -16,8 +16,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/pikachu-front.gif",
+            imageBack: "assets/images/pikachu-back.gif",
             ability: function () {
 
             },
@@ -26,37 +26,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Volt Tackle",
+                    type: ["Electric", "Physical"],
+                    power: 120,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    type: ["Normal", "Physical"],
+                    power: 40,
+                    accuracy: 100,
+                    priority: 1,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
+                    name: "Light Screen",
+                    type: ["Psychic", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: "-",
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Nuzzle",
+                    type: ["Electric", "Physical"],
+                    power: 20,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -73,8 +77,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/lapras-front.gif",
+            imageBack: "assets/images/lapras-back.gif",
             ability: function () {
 
             },
@@ -83,37 +87,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Surf",
+                    type: ["Water", "Special"],
+                    power: 90,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Blizzard",
+                    type: ["Ice", "Special"],
+                    power: 110,
+                    accuracy: 70,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Ice Shard",
+                    type: ["Ice", "Physical"],
+                    power: 40,
+                    accuracy: 100,
+                    priority: 1,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Psychic",
+                    type: ["Psychic", "Special"],
+                    power: 90,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -130,8 +138,8 @@ $("document").ready(function () {
             immunities: ["Ghost"],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/snorlax-front.gif",
+            imageBack: "assets/images/snorlax-back.gif",
             ability: function () {
 
             },
@@ -140,37 +148,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
+                    name: "Toxic",
+                    type: ["Poison", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Body Slam",
+                    type: ["Normal", "Physical"],
+                    power: 85,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Crunch",
+                    type: ["Dark", "Physical"],
+                    power: 80,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "High Horsepower",
+                    type: ["Ground", "Physical"],
+                    power: 95,
+                    accuracy: 95,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -187,8 +199,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/venusaur-front.gif",
+            imageBack: "assets/images/venusaur-back.gif",
             ability: function () {
 
             },
@@ -197,37 +209,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Leaf Storm",
+                    type: ["Grass", "Special"],
+                    power: 130,
+                    accuracy: 90,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
+                    name: "Leech Seed",
+                    type: ["Grass", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: 90,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Sludge Bomb",
+                    type: ["Poison", "Special"],
+                    power: 90,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Bulldoze",
+                    type: ["Ground", "Physical"],
+                    power: 60,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -244,8 +260,8 @@ $("document").ready(function () {
             immunities: ["Ground"],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/charizard-front.gif",
+            imageBack: "assets/images/charizard-back.gif",
             ability: function () {
 
             },
@@ -254,37 +270,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Fire Blast",
+                    type: ["Fire", "Special"],
+                    power: 110,
+                    accuracy: 85,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Air Slash",
+                    type: ["Flying", ""],
+                    power: 75,
+                    accuracy: 95,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
+                    name: "Focus Blast",
+                    type: ["Fighting", "Special"],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
+                    name: "Will-O-Wisp",
+                    type: ["Fire", "-"],
                     power: 0,
-                    accuracy: 0,
+                    accuracy: 85,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -301,8 +321,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/blastoise-front.gif",
+            imageBack: "assets/images/blastoise-back.gif",
             ability: function () {
 
             },
@@ -311,37 +331,41 @@ $("document").ready(function () {
             },
             moves: [
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Hydro Pump",
+                    type: ["Water", "Special"],
+                    power: 110,
+                    accuracy: 80,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Flash Cannon",
+                    type: ["Steel", "Special"],
+                    power: 80,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Dark Pulse",
+                    type: ["Dark", "Special"],
+                    power: 80,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
-                    name: "",
-                    type: "",
-                    power: 0,
-                    accuracy: 0,
+                    name: "Ice Beam",
+                    type: ["Ice", "Special"],
+                    power: 90,
+                    accuracy: 100,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -363,8 +387,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/alakazam-front.gif",
+            imageBack: "assets/images/alakazam-back.gif",
             ability: function () {
 
             },
@@ -374,36 +398,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -420,8 +448,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/machamp-front.gif",
+            imageBack: "assets/images/machamp-back.gif",
             ability: function () {
 
             },
@@ -431,36 +459,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -477,8 +509,8 @@ $("document").ready(function () {
             immunities: ["Ground"],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/aerodactyl-front.gif",
+            imageBack: "assets/images/aerodactyl-back.gif",
             ability: function () {
 
             },
@@ -488,36 +520,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -534,8 +570,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/exeggutor-front.gif",
+            imageBack: "assets/images/exeggutor-back.gif",
             ability: function () {
 
             },
@@ -545,36 +581,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -591,8 +631,8 @@ $("document").ready(function () {
             immunities: [""],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/arcanine-front.gif",
+            imageBack: "assets/images/arcanine-back.gif",
             ability: function () {
 
             },
@@ -602,36 +642,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -639,7 +683,7 @@ $("document").ready(function () {
             ]
         },
         {
-            name: "Gyrados",
+            name: "Gyarados",
             types: ["Water", "Flying"],
             doubleWeaknesses: ["Electric"],
             weaknesses: ["Rock"],
@@ -648,8 +692,8 @@ $("document").ready(function () {
             immunities: ["Ground"],
             stats: [0, 0, 0, 0, 0, 0],
             status: "",
-            imageFront: "",
-            imageBack: "",
+            imageFront: "assets/images/gyarados-front.gif",
+            imageBack: "assets/images/gyarados-back.gif",
             ability: function () {
 
             },
@@ -659,36 +703,40 @@ $("document").ready(function () {
             moves: [
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
                 },
                 {
                     name: "",
-                    type: "",
+                    type: ["", ""],
                     power: 0,
                     accuracy: 0,
+                    priority: 0,
                     effect: function () {
 
                     }
@@ -719,7 +767,7 @@ $("document").ready(function () {
         selectPokemon();
     }
 
-    function selectPokemon(){
+    function selectPokemon() {
         $("#mainDisplay").append("<div class=col-xs-2 id=selectBox>");
     }
 
