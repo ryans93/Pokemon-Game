@@ -67,6 +67,9 @@ h1{
     border-left:3px solid black;
     border-right:3px solid black;
     border-top:3px solid black;
+    padding-top:10px;
+    padding-bottom:10px;
+
 }
 
 #menuButton2, #menuButton3, #menuButton4, #menuButtonSwitch{
@@ -120,13 +123,15 @@ background-image: url(../images/blue.png);
     height:73vh;
     padding-right:0px;
     padding-left:0px;
+    margin-left:1vh;
+    margin-top:1.5vh;
 }
 
 #oppTrainerSpriteBox{
     position:fixed;
     right:-8vh;
     bottom:49vh;
-    height:23vh;
+    height:15vh;
     padding-right:0px;
     padding-left:0px;
 }
@@ -135,8 +140,102 @@ background-image: url(../images/blue.png);
     width:100%;
     height:10vh;
     background-color: lightblue;
+    border:1px black solid;
+    font-weight: bold;
+    font-size:20px;
 }
 
-#cancel{
-        background-color: red;
+#playerPokemonDisplay{
+    position: fixed;
+    left: 20%;
+    bottom: 25vh;
+    padding-left:0px;
+    padding-right:0px;
 }
+
+#playerHPbox{
+    background-color:white;
+    margin-top: 2vh;
+    margin-left: 2vh;
+    height: 70px;
+    width: 300px;
+    margin-right: 0px;
+    font-weight: bold;
+    display:none;
+}
+
+#playerName{
+    position: relative;
+    top: -13vh;
+    left: 1vh;
+    width:300px;
+}
+
+#playerStatus{
+    font-weight: normal;
+    position: relative;
+    top: -15.5vh;
+    left: 30vh;
+    height:20px;
+}
+
+#playerHPdisplay{
+    position: relative;
+    bottom: 15vh;
+    left: 1vh;
+}
+
+#playerHPbar{
+    position: relative;
+    top: -15vh;
+    background-color: green;
+    height: 3vh;
+    margin-left: 1vh
+}
+
+#oppPokemonDisplay{
+    position: fixed;
+    left: 60%;
+    bottom: 40vh;
+}
+
+#oppHPbox{
+    background-color:white;
+    height: 70px;
+    width: 300px;
+    font-weight: bold;
+    display:none;
+    position:fixed;
+    right:0;
+    margin-right:2vh;
+    top: 14vh;
+}
+
+#oppName{
+    margin-left: 1vh;
+    width:300px;
+}
+
+#oppStatus{
+    font-weight: normal;
+    height:20px;
+    position: relative;
+    right: -30vh;
+    top: -2.5vh;
+}
+
+#oppHPdisplay{
+    margin-left: 1vh;
+    position: relative;
+    top: -2vh;
+}
+
+#oppHPbar{
+    position: relative;
+    top: -2vh;
+    background-color: green;
+    height: 3vh;
+    margin-left: 1vh
+}
+
+
