@@ -162,6 +162,7 @@ background-image: url(../images/blue.png);
     margin-right: 0px;
     font-weight: bold;
     display:none;
+    border: 2px solid black; 
 }
 
 #playerName{
@@ -181,13 +182,13 @@ background-image: url(../images/blue.png);
 
 #playerHPdisplay{
     position: relative;
-    bottom: 15vh;
+    bottom: 15.5vh;
     left: 1vh;
 }
 
 #playerHPbar{
     position: relative;
-    top: -15vh;
+    top: -15.5vh;
     background-color: green;
     height: 3vh;
     margin-left: 1vh
@@ -209,6 +210,7 @@ background-image: url(../images/blue.png);
     right:0;
     margin-right:2vh;
     top: 14vh;
+    border: 2px solid black; 
 }
 
 #oppName{
@@ -227,12 +229,12 @@ background-image: url(../images/blue.png);
 #oppHPdisplay{
     margin-left: 1vh;
     position: relative;
-    top: -2vh;
+    top: -2.5vh;
 }
 
 #oppHPbar{
     position: relative;
-    top: -2vh;
+    top: -2.5vh;
     background-color: green;
     height: 3vh;
     margin-left: 1vh
