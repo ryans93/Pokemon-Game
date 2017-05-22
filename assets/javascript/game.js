@@ -24,7 +24,7 @@ $("document").ready(function () {
             doubleResistances: [""],
             immunities: [""],
             stats: [180, 180, 252, 93, 230, 115, 203],
-            status: "Poisoned",
+            status: "",
             imageFront: "assets/images/pikachu-front.gif",
             imageBack: "assets/images/pikachu-back.gif",
             ability: function () {
@@ -954,7 +954,7 @@ $("document").ready(function () {
 
     function populate() { //populates attack buttons, image div, hp box
         setTimeout(function () {
-            $("#playerPokemonDisplay").append("<img id='backImg' src=" + playerActive.imageBack + ">");
+            $("#playerPokemonDisplay").html("<img id='backImg' src=" + playerActive.imageBack + ">");
             var image = new Image();
             image.src = playerActive.imageBack
             image.onload = function () {
@@ -1055,6 +1055,7 @@ $("document").ready(function () {
                     $("#menuButton2").remove();
                     $("#menuButton3").remove();
                     $("#menuButton4").remove();
+                    $("#menuButtonSwitch").remove();
                     battle(0);
                 })
 
@@ -1064,6 +1065,7 @@ $("document").ready(function () {
                     $("#menuButton2").remove();
                     $("#menuButton3").remove();
                     $("#menuButton4").remove();
+                    $("#menuButtonSwitch").remove();
                     battle(1);
                 })
 
@@ -1073,6 +1075,7 @@ $("document").ready(function () {
                     $("#menuButton2").remove();
                     $("#menuButton3").remove();
                     $("#menuButton4").remove();
+                    $("#menuButtonSwitch").remove();
                     battle(2);
                 })
 
@@ -1082,6 +1085,7 @@ $("document").ready(function () {
                     $("#menuButton2").remove();
                     $("#menuButton3").remove();
                     $("#menuButton4").remove();
+                    $("#menuButtonSwitch").remove();
                     battle(3);
                 })
             }
@@ -1122,7 +1126,7 @@ $("document").ready(function () {
         }, 1500)
     } //end intializeOpp
 
-    function newOppActive() {
+    function newOppActive() { //add ai behavior *********************************************************
         var bool = true;
         while (bool) {
             var random = Math.floor(Math.random() * 5.99);
@@ -1130,7 +1134,7 @@ $("document").ready(function () {
                 oppActive = oppTeam[random];
                 $("#log").append("</br>Pokemon Trainer " + oppName + " sent out " + oppActive.name + "!");
                 setTimeout(function () {
-                    $("#oppPokemonDisplay").append("<img id='frontImg' src=" + oppActive.imageFront + ">");
+                    $("#oppPokemonDisplay").html("<img id='frontImg' src=" + oppActive.imageFront + ">");
                     var image = new Image();
                     image.src = oppActive.imageFront;
                     image.onload = function () {
@@ -1160,30 +1164,42 @@ $("document").ready(function () {
                 }, 1500)
                 bool = false;
             }
+            if (oppTeam[0].stats[1] == 0 && oppTeam[1].stats[1] == 0 && oppTeam[2].stats[1] == 0 && oppTeam[3].stats[1] == 0 && oppTeam[4].stats[1] == 0 && oppTeam[5].stats[1] == 0) {
+                bool = false;
+                setTimeout(function () {
+                    $("#log").html("");
+                    $("#log").append("Congratulations, you won!");
+                    music.pause();
+                    $("#menuButton1").remove();
+                    $("#menuButton2").remove();
+                    $("#menuButton3").remove();
+                    $("#menuButton4").remove();
+                    $("#menuButtonSwitch").remove();
+                }, 3000)
+            }
         }
     }
 
     function battle(playerMove) { //takes index of move as parameter
         oppMove = oppActive.AI();
-        if (playerActive.moves[playerMove].priority == oppMove.priority) {
+        if (playerActive.moves[playerMove].priority == oppActive.moves[oppMove].priority) {
             if (playerActive.stats[6] > oppActive.stats[6]) {
                 if (doesItHit(playerActive, playerMove)) {
                     attack(playerActive, oppActive, playerMove);
                 }
                 else {
-                    $("#log").append(playerActive.name + "'s attack missed!")
+                    $("#log").append("</br>" + playerActive.name + "'s attack missed!");
                 }
                 if (oppActive.stats[1] !== 0) {
                     if (doesItHit(oppActive, oppMove)) {
                         attack(oppActive, playerActive, oppMove);
                     }
                     else {
-                        $("#log").append("</br>" + oppActive.name + "'s attack missed!")
+                        $("#log").append("</br>" + oppActive.name + "'s attack missed!");
                     }
                 }
                 else {
-                    $("#log").append("</br>" + oppActive.name + " fainted!");
-                    newOppActive()
+                    $("#oppPokemonDisplay").html("");
                 }
             }
             else {
@@ -1191,40 +1207,35 @@ $("document").ready(function () {
                     attack(oppActive, playerActive, oppMove);
                 }
                 else {
-                    $("#log").append("</br>" + oppActive.name + "'s attack missed!")
+                    $("#log").append("</br>" + oppActive.name + "'s attack missed!");
                 }
                 if (playerActive.stats[1] !== 0) {
                     if (doesItHit(playerActive, playerMove)) {
                         attack(playerActive, oppActive, playerMove);
                     }
                     else {
-                        $("#log").append("</br>" + playerActive.name + "'s attack missed!")
+                        $("#log").append("</br>" + playerActive.name + "'s attack missed!");
                     }
-                }
-                else {
-                    $("#log").append("</br>" + playerActive.name + " fainted!");
-                    selectPokemon();
                 }
             }
         }
-        else if (playerActive.moves[playerMove].priority > oppMove.priority) {
+        else if (playerActive.moves[playerMove].priority > oppActive.moves[oppMove].priority) {
             if (doesItHit(playerActive, playerMove)) {
                 attack(playerActive, oppActive, playerMove);
             }
             else {
-                $("#log").append("</br>" + playerActive.name + "'s attack missed!")
+                $("#log").append("</br>" + playerActive.name + "'s attack missed!");
             }
             if (oppActive.stats[1] !== 0) {
                 if (doesItHit(oppActive, oppMove)) {
                     attack(oppActive, playerActive, oppMove);
                 }
                 else {
-                    $("#log").append("</br>" + oppActive.name + "'s attack missed!")
+                    $("#log").append("</br>" + oppActive.name + "'s attack missed!");
                 }
             }
             else {
-                $("#log").append("</br>" + oppActive.name + " fainted!");
-                newOppActive()
+                $("#oppPokemonDisplay").html("");
             }
         }
         else {
@@ -1232,22 +1243,36 @@ $("document").ready(function () {
                 attack(oppActive, playerActive, oppMove);
             }
             else {
-                $("#log").append("</br>" + oppActive.name + "'s attack missed!")
+                $("#log").append("</br>" + oppActive.name + "'s attack missed!");
             }
             if (playerActive.stats[1] !== 0) {
                 if (doesItHit(playerActive, playerMove)) {
                     attack(playerActive, oppActive, playerMove);
                 }
                 else {
-                    $("#log").append("</br>" + playerActive.name + "'s attack missed!")
+                    $("#log").append("</br>" + playerActive.name + "'s attack missed!");
                 }
             }
-            else {
-                $("#log").append("</br>" + playerActive.name + " fainted!");
+        }
+        if (playerActive.stats[1] == 0) {
+            $("#log").append("</br>" + playerActive.name + " fainted!");
+            unpopulate();
+            if (playerTeam[0] !== 0 && playerTeam[1] !== 0 && playerTeam[2] !== 0 && playerTeam[3] !== 0 && playerTeam[4] !== 0 && playerTeam[5] !== 0) {
                 selectPokemon();
             }
+            else {
+                $("#log").append("You lost the battle!");
+            }
         }
-        populate();
+        else {
+            repopulate();
+        }
+        if (oppActive.stats[1] == 0) {
+            $("#log").append("</br>" + oppActive.name + " fainted!");
+            $("#oppPokemonDisplay").html("");
+            newOppActive();
+        }
+
     } //end of battle function
 
 
@@ -1262,7 +1287,7 @@ $("document").ready(function () {
     }
 
     function attack(attacker, defender, move) {
-        $("#log").append("</br>"+attacker.name + " used " + attacker.moves[move].name + ".");
+        $("#log").append("</br>" + attacker.name + " used " + attacker.moves[move].name + ".");
         var damage;
         var modifier = findModifier(attacker, defender, move);
         if (attacker.moves[move].type[1].indexOf("Physical") !== -1) {
@@ -1272,8 +1297,8 @@ $("document").ready(function () {
             damage = Math.floor(((42 * attacker.moves[move].power * (attacker.stats[4] / defender.stats[5]) + 2)) / 50 * modifier);
         }
         defender.stats[1] -= damage;
-        if(defender.stats[1]<0){
-            defender.stats[1]=0;
+        if (defender.stats[1] < 0) {
+            defender.stats[1] = 0;
         }
         updateHPdisplay(defender);
     }
@@ -1282,29 +1307,33 @@ $("document").ready(function () {
         var critical = 1;
         if (1 + Math.random() * 99 <= 6.25) {
             critical = 1.5;
+            $("#log").append("</br>It's a critical hit!");
         }
         var random = Math.random() * .15 + .85;
         var stab = 1;
-        for (var i = 0; i < attacker.types.length; i++) {
-            if (attacker.moves[move].type.indexOf(attacker.types[i]) !== -1) {
+        if (attacker.moves[move].type.indexOf(attacker.types[0]) !== -1) {
+            stab = 1.5;
+        }
+        if (attacker.types.length > 1) {
+            if (attacker.moves[move].type.indexOf(attacker.types[1]) !== -1) {
                 stab = 1.5;
             }
         }
-        var type=1;
+        var type = 1;
         if (defender.doubleWeaknesses.indexOf(attacker.moves[move].type[0]) !== -1) {
-            type = 4;
+            type += 3;
             $("#log").append("</br>It's super-effective!");
         }
         if (defender.weaknesses.indexOf(attacker.moves[move].type[0]) !== -1) {
-            type = 2;
+            type += 1;
             $("#log").append("</br>It's super-effective!");
         }
         if (defender.resistances.indexOf(attacker.moves[move].type[0]) !== -1) {
-            type = .5;
+            type *= .5;
             $("#log").append("</br>It's not very effective.");
         }
         if (defender.doubleResistances.indexOf(attacker.moves[move].type[0]) !== -1) {
-            type = .25;
+            type *= .25;
             $("#log").append("</br>It's not very effective.");
         }
         if (defender.immunities.indexOf(attacker.moves[move].type[0]) !== -1) {
@@ -1316,7 +1345,7 @@ $("document").ready(function () {
             burn = .5;
         }
         var other = 1; //used for abilities
-        var modifier=critical * random * stab * type * burn * other;
+        var modifier = critical * random * stab * type * burn * other;
         return modifier;
     }
 
@@ -1355,9 +1384,85 @@ $("document").ready(function () {
                 });
             }
         }
-
-
     }
 
+    function repopulate() {
+        $("#playerName").html(playerActive.name);
+        $("#playerStatus").html(playerActive.status);
+        $("#playerHPbox").show();
+        $("#playerHPdisplay").html("HP: " + playerActive.stats[1] + "/" + playerActive.stats[0]);
+        $('#playerHPbar').css({
+            "width": playerActive.stats[1] / playerActive.stats[0] * 285,
+            "background-color": "green"
+        });
+        if (playerActive.stats[1] / playerActive.stats[0] <= .5) {
+            $('#playerHPbar').css({
+                "background-color": "yellow"
+            });
+        }
+        if (playerActive.stats[1] / playerActive.stats[0] <= .1) {
+            $('#playerHPbar').css({
+                "background-color": "red"
+            });
+        }
+        $("#menu").append("<button class=btn-default id=menuButton1>");
+        $("#menuButton1").html(playerActive.moves[0].name);
+        $("#menu").append("<button class=btn-default id=menuButton2>");
+        $("#menuButton2").html(playerActive.moves[1].name);
+        $("#menu").append("<button class=btn-default id=menuButton3>");
+        $("#menuButton3").html(playerActive.moves[2].name);
+        $("#menu").append("<button class=btn-default id=menuButton4>");
+        $("#menuButton4").html(playerActive.moves[3].name);
+        $("#menu").append("<button class=btn-default id=menuButtonSwitch>");
+        $("#menuButtonSwitch").html("Switch Pokemon");
+        $("#menuButton1").on("click", function () {
+            $("#log").html("");
+            $("#menuButton1").remove();
+            $("#menuButton2").remove();
+            $("#menuButton3").remove();
+            $("#menuButton4").remove();
+            $("#menuButtonSwitch").remove();
+            battle(0);
+        })
+
+        $("#menuButton2").on("click", function () {
+            $("#log").html("");
+            $("#menuButton1").remove();
+            $("#menuButton2").remove();
+            $("#menuButton3").remove();
+            $("#menuButton4").remove();
+            $("#menuButtonSwitch").remove();
+            battle(1);
+        })
+
+        $("#menuButton3").on("click", function () {
+            $("#log").html("");
+            $("#menuButton1").remove();
+            $("#menuButton2").remove();
+            $("#menuButton3").remove();
+            $("#menuButton4").remove();
+            $("#menuButtonSwitch").remove();
+            battle(2);
+        })
+
+        $("#menuButton4").on("click", function () {
+            $("#log").html("");
+            $("#menuButton1").remove();
+            $("#menuButton2").remove();
+            $("#menuButton3").remove();
+            $("#menuButton4").remove();
+            $("#menuButtonSwitch").remove();
+            battle(3);
+        })
+    }
+
+    function unpopulate() {
+        $("#menuButton1").remove();
+        $("#menuButton2").remove();
+        $("#menuButton3").remove();
+        $("#menuButton4").remove();
+        $("#menuButtonSwitch").remove();
+        $("#playerPokemonDisplay").html("");
+    }
 
 }) //end of document.ready
