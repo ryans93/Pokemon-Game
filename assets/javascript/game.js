@@ -4,9 +4,9 @@ var oppName;
 var playerActive;
 var oppActive;
 var turn = 0;
-var music = document.createElement("audio");
+var music = document.createElement("audio"); //added audio
 music.setAttribute("src", "assets/music/battleTheme.mp3");
-music.addEventListener('ended', function () {
+music.addEventListener('ended', function () { //loop music
     this.currentTime = 0;
     this.play();
 }, false);
@@ -14,6 +14,7 @@ music.addEventListener('ended', function () {
 $("document").ready(function () {
 
     //begin trainer object declarations
+    //start red trainer object
     var red = [
         {
             name: "Pikachu",
@@ -390,7 +391,7 @@ $("document").ready(function () {
     ]
 
     //end of red object
-
+    //start blue trainer object
     var blue = [
         {
             name: "Alakazam",
@@ -765,24 +766,24 @@ $("document").ready(function () {
             ]
         },
     ]
-    //end of blue object
+    //end of blue trainer object
     //end of trainer objects
 
-    $("#redButton").on("click", function () {
+    $("#redButton").on("click", function () { //red button handler
         playerTeam = red;
         oppTeam = blue;
         oppName = "Blue";
         initialize();
     })
-
-    $("#blueButton").on("click", function () {
+ 
+    $("#blueButton").on("click", function () { //blue button handler
         playerTeam = blue;
         oppTeam = red;
         oppName = "Red";
         initialize();
     })
 
-    function initialize() { //sets main dsipay, creates display divs, calls selectPokemon() when complete
+    function initialize() { //sets main display, creates display divs, calls selectPokemon() when complete
         $("#redButton").remove();
         $("#blueButton").remove();
         $("#mainDisplay").append("<div id=playerPokemonDisplay>");
@@ -805,7 +806,7 @@ $("document").ready(function () {
         $('.btn-group').attr('id', 'menu');
         $("#log").html("");
         $("#log").append("Pokemon Trainer " + oppName + " challenges you to a battle!");
-        music.play();
+        music.play(); //start music
         setTimeout(function () {
             $("#log").append("</br>Select a pokemon to send out.");
             selectPokemon();
@@ -981,8 +982,8 @@ $("document").ready(function () {
                     "background-color": "red"
                 });
             }
-            if (oppActive == undefined) {
-                initializeOpp();
+            if (oppActive == undefined) { 
+                initializeOpp(); //sets opponents active pokemon
                 setTimeout(function () {
                     $("#menu").append("<button class=btn-default id=menuButton1>");
                     $("#menuButton1").html(playerActive.moves[0].name);
@@ -995,7 +996,9 @@ $("document").ready(function () {
                     $("#menu").append("<button class=btn-default id=menuButtonSwitch>");
                     $("#menuButtonSwitch").html("Switch Pokemon");
                     $("#log").append("</br>Select a move.");
-                    //begin attack button click events
+                    
+            //begin attack button click events
+                    
                     $("#menuButton1").on("click", function () {
                         $("#log").html("");
                         $("#menuButton1").remove();
@@ -1126,7 +1129,7 @@ $("document").ready(function () {
         }, 1500)
     } //end intializeOpp
 
-    function newOppActive() { //add ai behavior *********************************************************
+    function newOppActive() { //selects new pokemon opponent sends out when player defeats opponents current pokemon
         var bool = true;
         while (bool) {
             var random = Math.floor(Math.random() * 5.99);
@@ -1164,6 +1167,8 @@ $("document").ready(function () {
                 }, 1500)
                 bool = false;
             }
+            
+            //statement if player wins (makes all opponent's pokemon faint)
             if (oppTeam[0].stats[1] == 0 && oppTeam[1].stats[1] == 0 && oppTeam[2].stats[1] == 0 && oppTeam[3].stats[1] == 0 && oppTeam[4].stats[1] == 0 && oppTeam[5].stats[1] == 0) {
                 bool = false;
                 setTimeout(function () {
@@ -1181,16 +1186,16 @@ $("document").ready(function () {
     }
 
     function battle(playerMove) { //takes index of move as parameter
-        oppMove = oppActive.AI();
-        if (playerActive.moves[playerMove].priority == oppActive.moves[oppMove].priority) {
-            if (playerActive.stats[6] > oppActive.stats[6]) {
-                if (doesItHit(playerActive, playerMove)) {
-                    attack(playerActive, oppActive, playerMove);
+        oppMove = oppActive.AI(); //opponent selects move
+        if (playerActive.moves[playerMove].priority == oppActive.moves[oppMove].priority) { //attack if = move priority
+            if (playerActive.stats[6] > oppActive.stats[6]) { //attack order by speed
+                if (doesItHit(playerActive, playerMove)) { //checks if attack hits successfully 
+                    attack(playerActive, oppActive, playerMove); //attack function called (damage calculation)
                 }
                 else {
                     $("#log").append("</br>" + playerActive.name + "'s attack missed!");
                 }
-                if (oppActive.stats[1] !== 0) {
+                if (oppActive.stats[1] !== 0) { //opponent attacks if player doesn't knock out pokemon on same turn
                     if (doesItHit(oppActive, oppMove)) {
                         attack(oppActive, playerActive, oppMove);
                     }
@@ -1202,14 +1207,14 @@ $("document").ready(function () {
                     $("#oppPokemonDisplay").html("");
                 }
             }
-            else {
+            else { //if opponent attacks first 
                 if (doesItHit(oppActive, oppMove)) {
                     attack(oppActive, playerActive, oppMove);
                 }
                 else {
                     $("#log").append("</br>" + oppActive.name + "'s attack missed!");
                 }
-                if (playerActive.stats[1] !== 0) {
+                if (playerActive.stats[1] !== 0) { //player sttacks if not KO'd by opponent on same turn
                     if (doesItHit(playerActive, playerMove)) {
                         attack(playerActive, oppActive, playerMove);
                     }
@@ -1219,7 +1224,7 @@ $("document").ready(function () {
                 }
             }
         }
-        else if (playerActive.moves[playerMove].priority > oppActive.moves[oppMove].priority) {
+        else if (playerActive.moves[playerMove].priority > oppActive.moves[oppMove].priority) { //if player's move priority is higher
             if (doesItHit(playerActive, playerMove)) {
                 attack(playerActive, oppActive, playerMove);
             }
@@ -1238,7 +1243,7 @@ $("document").ready(function () {
                 $("#oppPokemonDisplay").html("");
             }
         }
-        else {
+        else { //if player's move priority is higher
             if (doesItHit(oppActive, oppMove)) {
                 attack(oppActive, playerActive, oppMove);
             }
@@ -1254,20 +1259,20 @@ $("document").ready(function () {
                 }
             }
         }
-        if (playerActive.stats[1] == 0) {
+        if (playerActive.stats[1] == 0) { //if player's pokemon faints
             $("#log").append("</br>" + playerActive.name + " fainted!");
             unpopulate();
             if (playerTeam[0] !== 0 && playerTeam[1] !== 0 && playerTeam[2] !== 0 && playerTeam[3] !== 0 && playerTeam[4] !== 0 && playerTeam[5] !== 0) {
                 selectPokemon();
             }
-            else {
+            else { //player loses
                 $("#log").append("You lost the battle!");
             }
         }
         else {
             repopulate();
         }
-        if (oppActive.stats[1] == 0) {
+        if (oppActive.stats[1] == 0) { //if opponent's pokemon faints
             $("#log").append("</br>" + oppActive.name + " fainted!");
             $("#oppPokemonDisplay").html("");
             newOppActive();
@@ -1276,7 +1281,7 @@ $("document").ready(function () {
     } //end of battle function
 
 
-    function doesItHit(attacker, move) {
+    function doesItHit(attacker, move) { //determines if attack hits based on move's accuracy stat
         var random = 1 + Math.random() * 99;
         if (random <= attacker.moves[move].accuracy) {
             return true;
@@ -1286,24 +1291,25 @@ $("document").ready(function () {
         }
     }
 
-    function attack(attacker, defender, move) {
+    function attack(attacker, defender, move) { //calculates damage
         $("#log").append("</br>" + attacker.name + " used " + attacker.moves[move].name + ".");
         var damage;
-        var modifier = findModifier(attacker, defender, move);
-        if (attacker.moves[move].type[1].indexOf("Physical") !== -1) {
+        var modifier = findModifier(attacker, defender, move); //calculates modifier
+        if (attacker.moves[move].type[1].indexOf("Physical") !== -1) { //determines what stats are used based on attack type
             damage = Math.floor(((42 * attacker.moves[move].power * (attacker.stats[2] / defender.stats[3]) + 2)) / 50 * modifier);
         }
-        if (attacker.moves[move].type[1].indexOf("Special") !== -1) {
+        if (attacker.moves[move].type[1].indexOf("Special") !== -1) { //determines what stats are used based on attack type
             damage = Math.floor(((42 * attacker.moves[move].power * (attacker.stats[4] / defender.stats[5]) + 2)) / 50 * modifier);
         }
-        defender.stats[1] -= damage;
+        defender.stats[1] -= damage; //reduces HP by damage
         if (defender.stats[1] < 0) {
-            defender.stats[1] = 0;
+            defender.stats[1] = 0; //prevents negative HP
         }
-        updateHPdisplay(defender);
+        updateHPdisplay(defender); //updates hp display
     }
 
-    function findModifier(attacker, defender, move) {
+    //calculates increased/reduced damage based on critical hits, same type attack bonus (STAB), type matchups, status conditions, and random multiplier
+    function findModifier(attacker, defender, move) { 
         var critical = 1;
         if (1 + Math.random() * 99 <= 6.25) {
             critical = 1.5;
@@ -1349,7 +1355,7 @@ $("document").ready(function () {
         return modifier;
     }
 
-    function updateHPdisplay(target) {
+    function updateHPdisplay(target) { //updates hp display after damage
         if (playerTeam.indexOf(target) !== -1) {
             $("#playerHPdisplay").html("HP: " + playerActive.stats[1] + "/" + playerActive.stats[0]);
             $('#playerHPbar').css({
@@ -1385,8 +1391,8 @@ $("document").ready(function () {
             }
         }
     }
-
-    function repopulate() {
+ 
+    function repopulate() { //repopulate attack buttons and hp display after attack phase
         $("#playerName").html(playerActive.name);
         $("#playerStatus").html(playerActive.status);
         $("#playerHPbox").show();
@@ -1456,7 +1462,7 @@ $("document").ready(function () {
         })
     }
 
-    function unpopulate() {
+    function unpopulate() { //remove attack buttons and player pokemon image
         $("#menuButton1").remove();
         $("#menuButton2").remove();
         $("#menuButton3").remove();
