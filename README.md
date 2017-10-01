@@ -6,5 +6,5 @@ A fun RPG-style Pokemon battle simulator. Pick a trainer (Red or Blue) and defea
 # Technologies Used
 HTML5, CSS3, Bootstrap, javascript, jQuery
 
-# Notes
+# Issues
 Still in development. Some attacks cause bugs. Switch functionality not yet incorporated. Currently using RNG for opponent AI.
