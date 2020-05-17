@@ -3,9 +3,9 @@
 ## Description
 A fun RPG-style Pokemon battle simulator. Pick a trainer (Red or Blue) and defeat your opponent! The objective is to knock out all six of your opponent's Pokemon before they knock out yours. Mechanics from the real Pokemon games (type match-ups, stats, damage calculation) are incorporated into the app. 
 
-[player-select](/assets/screenshots/player-select.png)
-[battle](/assets/screenshots/battle.png)
-[pokemon-select](/assets/screenshots/pokemon-select.png)
+![player-select](./assets/screenshots/player-select.png)
+![battle](./assets/screenshots/battle.png)
+![pokemon-select](./assets/screenshots/pokemon-select.png)
 
 ### Technologies Used
 - HTML5 
