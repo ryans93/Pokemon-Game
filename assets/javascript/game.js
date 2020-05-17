@@ -1,960 +1,81 @@
+/*
+1. selectPokemon: appends selectbox with pokemon-slot and cancel buttons
+    -clicking pokemon slot: set playerActive to that pokemon, remove selectBox, call populateImg
+2. populateImg: sets player img, call getOppActive if oppActive undefined, call populateMenu
+    3. getOppActive: gets oppActive, calls dsiplayOpp, user wins if no oppActive is found
+    4. displayOpp: sets oppImage, calls updateHPdisplay
+5. populateMenu: displays attack menu
+    -attack buttons: call battle() or swap pokemon
+6. battle: calls doesItHit() and attack()
+    calls selectPokemon() if user pokemon faints, user losses if then can't select a pokemon
+    if selectPokemon() not called, populateMenu() called
+    calls getOppActive() if opponents pokemon faints
+        7. doesItHit: returns booloean if attack hits
+        8. attack: calls findModifier(), substracts damage from HP, calls updateHPdisplay()
+        9. findModifier: returns attack modifier for damage calculation
+10. updateHPdisplay: updates hp display box
+*/
+import red from "./red.js";
+import blue from "./blue.js";
 var playerTeam;
+var playerActive;
 var oppTeam;
 var oppName;
-var playerActive;
 var oppActive;
-var turn = 0;
+var swap = false;
 var music = document.createElement("audio"); //added audio
-music.setAttribute("src", "assets/music/battleTheme.mp3");
-music.addEventListener('ended', function () { //loop music
-    this.currentTime = 0;
-    this.play();
-}, false);
-
-$("document").ready(function () {
-
-    //begin trainer object declarations
-    //start red trainer object
-    var red = [
-        {
-            name: "Pikachu",
-            types: ["Electric"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Ground"],
-            resistances: ["Electric", "Flying", "Steel"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [180, 180, 252, 93, 230, 115, 203],
-            status: "",
-            imageFront: "assets/images/pikachu-front.gif",
-            imageBack: "assets/images/pikachu-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Volt Tackle",
-                    type: ["Electric", "Physical"],
-                    power: 120,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Quick Attack",
-                    type: ["Normal", "Physical"],
-                    power: 40,
-                    accuracy: 100,
-                    priority: 1,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Light Screen",
-                    type: ["Psychic", "-"],
-                    power: 0,
-                    accuracy: "-",
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Nuzzle",
-                    type: ["Electric", "Physical"],
-                    power: 20,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Lapras",
-            types: ["Water", "Ice"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Fighting", "Electric", "Grass", "Rock"],
-            resistances: ["Water", "Flying", "Steel"],
-            doubleResistances: ["Ice"],
-            immunities: [""],
-            stats: [370, 370, 192, 181, 192, 214, 137],
-            status: "",
-            imageFront: "assets/images/lapras-front.gif",
-            imageBack: "assets/images/lapras-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Surf",
-                    type: ["Water", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Blizzard",
-                    type: ["Ice", "Special"],
-                    power: 110,
-                    accuracy: 70,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Ice Shard",
-                    type: ["Ice", "Physical"],
-                    power: 40,
-                    accuracy: 100,
-                    priority: 1,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Psychic",
-                    type: ["Psychic", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Snorlax",
-            types: ["Normal"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Fighting"],
-            resistances: [""],
-            doubleResistances: [""],
-            immunities: ["Ghost"],
-            stats: [430, 430, 247, 148, 148, 247, 71],
-            status: "",
-            imageFront: "assets/images/snorlax-front.gif",
-            imageBack: "assets/images/snorlax-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Toxic",
-                    type: ["Poison", "-"],
-                    power: 0,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Body Slam",
-                    type: ["Normal", "Physical"],
-                    power: 85,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Crunch",
-                    type: ["Dark", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "High Horsepower",
-                    type: ["Ground", "Physical"],
-                    power: 95,
-                    accuracy: 95,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Venusaur",
-            types: ["Grass", "Poison"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Fire", "Ice", "Flying", "Psychic"],
-            resistances: ["Electric", "Water", "Fighting", "Fairy"],
-            doubleResistances: ["Grass"],
-            immunities: [""],
-            stats: [270, 270, 185, 188, 225, 225, 181],
-            status: "",
-            imageFront: "assets/images/venusaur-front.gif",
-            imageBack: "assets/images/venusaur-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Leaf Storm",
-                    type: ["Grass", "Special"],
-                    power: 130,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Leech Seed",
-                    type: ["Grass", "-"],
-                    power: 0,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Sludge Bomb",
-                    type: ["Poison", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Bulldoze",
-                    type: ["Ground", "Physical"],
-                    power: 60,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Charizard",
-            types: ["Fire", "Flying"],
-            doubleWeaknesses: ["Rock"],
-            weaknesses: ["Water", "Electric",],
-            resistances: ["Fire", "Fighting", "Steel", "Fairy"],
-            doubleResistances: ["Grass", "Bug"],
-            immunities: ["Ground"],
-            stats: [266, 266, 190, 177, 245, 192, 225],
-            status: "",
-            imageFront: "assets/images/charizard-front.gif",
-            imageBack: "assets/images/charizard-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Fire Blast",
-                    type: ["Fire", "Special"],
-                    power: 110,
-                    accuracy: 85,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Air Slash",
-                    type: ["Flying", "Special"],
-                    power: 75,
-                    accuracy: 95,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Focus Blast",
-                    type: ["Fighting", "Special"],
-                    power: 120,
-                    accuracy: 70,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Will-O-Wisp",
-                    type: ["Fire", "-"],
-                    power: 0,
-                    accuracy: 85,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Blastoise",
-            types: ["Water"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Electric", "Grass"],
-            resistances: ["Fire", "Water", "Steel", "Ice"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [268, 268, 188, 225, 192, 236, 177],
-            status: "",
-            imageFront: "assets/images/blastoise-front.gif",
-            imageBack: "assets/images/blastoise-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Hydro Pump",
-                    type: ["Water", "Special"],
-                    power: 110,
-                    accuracy: 80,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Flash Cannon",
-                    type: ["Steel", "Special"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Dark Pulse",
-                    type: ["Dark", "Special"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Ice Beam",
-                    type: ["Ice", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-    ]
-
-    //end of red object
-    //start blue trainer object
-    var blue = [
-        {
-            name: "Alakazam",
-            types: ["Psychic"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Bug", "Ghost", "Dark"],
-            resistances: ["Fighting", "Psychic"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [220, 220, 115, 104, 302, 214, 269],
-            status: "",
-            imageFront: "assets/images/alakazam-front.gif",
-            imageBack: "assets/images/alakazam-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Psychic",
-                    type: ["Psychic", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Shadow Ball",
-                    type: ["Ghost", "Special"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Future Sight",
-                    type: ["Psychic", "Special"],
-                    power: 120,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Reflect",
-                    type: ["Psychic", "-"],
-                    power: 0,
-                    accuracy: "-",
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Machamp",
-            types: ["Fighting"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Flying", "Psychic", "Fairy"],
-            resistances: ["Bug", "Rock", "Dark"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [290, 290, 291, 181, 148, 192, 126],
-            status: "",
-            imageFront: "assets/images/machamp-front.gif",
-            imageBack: "assets/images/machamp-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Cross Chop",
-                    type: ["Fighting", "Physical"],
-                    power: 100,
-                    accuracy: 80,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Bulk Up",
-                    type: ["Fighting", "-"],
-                    power: 0,
-                    accuracy: "-",
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Knock Off",
-                    type: ["Dark", "Physical"],
-                    power: 65,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Poison Jab",
-                    type: ["Poison", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Aerodactyl",
-            types: ["Rock", "Flying"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Water", "Electric", "Ice", "Rock", "Steel"],
-            resistances: ["Normal", "Fire", "Poison", "Flying", "Bug"],
-            doubleResistances: [""],
-            immunities: ["Ground"],
-            stats: [270, 270, 236, 148, 137, 170, 291],
-            status: "",
-            imageFront: "assets/images/aerodactyl-front.gif",
-            imageBack: "assets/images/aerodactyl-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Rock Slide",
-                    type: ["Rock", "Physical"],
-                    power: 75,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Crunch",
-                    type: ["Dark", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Iron Head",
-                    type: ["Steel", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Sky Drop",
-                    type: ["Flying", "Physical"],
-                    power: 60,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Exeggutor",
-            types: ["Grass", "Psychic"],
-            doubleWeaknesses: ["Bug"],
-            weaknesses: ["Fire", "Ice", "Poison", "Flying", "Ghost", "Dark"],
-            resistances: ["Electric", "Water", "Grass", "Fighting", "Ground", "Psychic"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [300, 300, 214, 192, 280, 170, 126],
-            status: "",
-            imageFront: "assets/images/exeggutor-front.gif",
-            imageBack: "assets/images/exeggutor-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Leaf Storm",
-                    type: ["Grass", "Special"],
-                    power: 130,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Psychic",
-                    type: ["Psychic", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Sludge Bomb",
-                    type: ["Poison", "Special"],
-                    power: 90,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Hypnosis",
-                    type: ["Psychic", "-"],
-                    power: 0,
-                    accuracy: 60,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Arcanine",
-            types: ["Fire"],
-            doubleWeaknesses: [""],
-            weaknesses: ["Ground", "Water", "Rock"],
-            resistances: ["Fire", "Grass", "Ice", "Bug", "Fairy", "Steel"],
-            doubleResistances: [""],
-            immunities: [""],
-            stats: [290, 290, 247, 181, 225, 181, 214],
-            status: "",
-            imageFront: "assets/images/arcanine-front.gif",
-            imageBack: "assets/images/arcanine-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Extreme Speed",
-                    type: ["Normal", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 1,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Flare Blitz",
-                    type: ["Fire", "Physical"],
-                    power: 120,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Thunder Fang",
-                    type: ["Electric", "Physical"],
-                    power: 65,
-                    accuracy: 95,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Bulldoze",
-                    type: ["Ground", "Physical"],
-                    power: 60,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-        {
-            name: "Gyarados",
-            types: ["Water", "Flying"],
-            doubleWeaknesses: ["Electric"],
-            weaknesses: ["Rock"],
-            resistances: ["Fire", "Water", "Steel", "Fighting", "Bug"],
-            doubleResistances: [""],
-            immunities: ["Ground"],
-            stats: [300, 300, 280, 179, 137, 225, 183],
-            status: "",
-            imageFront: "assets/images/gyarados-front.gif",
-            imageBack: "assets/images/gyarados-back.gif",
-            ability: function () {
-
-            },
-            AI: function () {
-                var random = Math.floor(Math.random() * 3.99);
-                return random;
-            },
-            moves: [
-                {
-                    name: "Aqua Tail",
-                    type: ["Water", "Physical"],
-                    power: 90,
-                    accuracy: 90,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Crunch",
-                    type: ["Dark", "Physical"],
-                    power: 80,
-                    accuracy: 100,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Ice Fang",
-                    type: ["Ice", "Physical"],
-                    power: 65,
-                    accuracy: 95,
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-                {
-                    name: "Dragon Dance",
-                    type: ["Dragon", "-"],
-                    power: 0,
-                    accuracy: "-",
-                    priority: 0,
-                    effect: function () {
-
-                    }
-                },
-            ]
-        },
-    ]
-    //end of blue trainer object
-    //end of trainer objects
-
-    $("#redButton").on("click", function () { //red button handler
-        playerTeam = red;
-        oppTeam = blue;
-        oppName = "Blue";
-        initialize();
-    })
- 
-    $("#blueButton").on("click", function () { //blue button handler
-        playerTeam = blue;
-        oppTeam = red;
-        oppName = "Red";
-        initialize();
-    })
-
-    function initialize() { //sets main display, creates display divs, calls selectPokemon() when complete
-        $("#redButton").remove();
-        $("#blueButton").remove();
+music.setAttribute("src", "assets/music/battleTheme3.mp3");
+music.loop = true;
+
+$("document").ready(() => {
+    $(".player-select").on("click", function () { //player select button handler, set teams and appends html
+        if ($(this).attr("data") === "red") {
+            playerTeam = red;
+            oppTeam = blue;
+            oppName = "Blue";
+        }
+        else {
+            playerTeam = blue;
+            oppTeam = red;
+            oppName = "Red";
+        }
+        $(".player-select").remove(); // remove player buttons and append html
         $("#mainDisplay").append("<div id=playerPokemonDisplay>");
         $("#mainDisplay").append("<div id=oppPokemonDisplay>");
         $("#mainDisplay").append("<div class=col-xs-2 id=oppTrainerSpriteBox>");
-        if (oppName === "Red") {
-            $('#oppTrainerSpriteBox').css({
-                "background-image": "url(assets/images/red.png)",
-                "background-size": "33% 100%",
-                "background-repeat": "no-repeat"
-            });
-        }
-        else {
-            $('#oppTrainerSpriteBox').css({
-                "background-image": "url(assets/images/blue.png)",
-                "background-size": "33% 100%",
-                "background-repeat": "no-repeat"
-            });
-        }
+        $('#oppTrainerSpriteBox').css({
+            "background-image": "url(assets/images/" + oppName + ".png)",
+            "background-size": "33% 100%",
+            "background-repeat": "no-repeat"
+        });
         $('.btn-group').attr('id', 'menu');
         $("#log").html("");
         $("#log").append("Pokemon Trainer " + oppName + " challenges you to a battle!");
         music.play(); //start music
-        setTimeout(function () {
+        setTimeout(() => {
             $("#log").append("</br>Select a pokemon to send out.");
-            selectPokemon();
-        }, 3500);
-    }
+            selectPokemon(); // call selectPokemon
+        }, 3000);
+    });
 
-    function selectPokemon() { //appends select box and respective buttons, changes active pokemon, removes select box when complete, calls populate()
+    function selectPokemon() { //appends select box and pokemon buttons
         $("#mainDisplay").append("<div class=col-xs-3 id=selectBox>");
-        $("#selectBox").append("<button class=pokemon-button id=firstPokemon>");
-        if (playerTeam[0].stats[1] / playerTeam[0].stats[0] == 0) {
-            $("#firstPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[0].status = "Fainted";
+        for (let i = 0; i < 6; i++) { // append each pokemon
+            $("#selectBox").append("<button class='pokemon-button pokemon-slot' data=" + i + " id=Pokemon-" + (i + 1) + ">");
+            if (playerTeam[i].stats[1] / playerTeam[i].stats[0] == 0) {
+                $("#Pokemon-" + (i + 1)).css({
+                    "background-color": "red"
+                });
+                playerTeam[i].status = "Fainted";
+            }
+            $("#Pokemon-" + (i + 1)).html(playerTeam[i].name + "</br>HP: " + playerTeam[i].stats[1] + "/" + playerTeam[i].stats[0] + " " + playerTeam[i].status);
         }
-        $("#firstPokemon").html(playerTeam[0].name + "</br>HP: " + playerTeam[0].stats[1] + "/" + playerTeam[0].stats[0] + " " + playerTeam[0].status);
-        $("#selectBox").append("<button class=pokemon-button id=secondPokemon>");
-        if (playerTeam[1].stats[1] == 0) {
-            $("#secondPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[1].status = "Fainted";
-        }
-        $("#secondPokemon").html(playerTeam[1].name + "</br>HP: " + playerTeam[1].stats[1] + "/" + playerTeam[1].stats[0] + " " + playerTeam[1].status);
-        $("#selectBox").append("<button class=pokemon-button id=thirdPokemon>");
-        if (playerTeam[2].stats[1] == 0) {
-            $("#thirdPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[2].status = "Fainted";
-        }
-        $("#thirdPokemon").html(playerTeam[2].name + "</br>HP: " + playerTeam[2].stats[1] + "/" + playerTeam[2].stats[0] + " " + playerTeam[2].status);
-        $("#selectBox").append("<button class=pokemon-button id=fourthPokemon>");
-        if (playerTeam[3].stats[1] == 0) {
-            $("#fourthPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[3].status = "Fainted";
-        }
-        $("#fourthPokemon").html(playerTeam[3].name + "</br>HP: " + playerTeam[3].stats[1] + "/" + playerTeam[3].stats[0] + " " + playerTeam[3].status);
-        $("#selectBox").append("<button class=pokemon-button id=fifthPokemon>");
-        if (playerTeam[4].stats[1] == 0) {
-            $("#fifthPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[4].status = "Fainted";
-        }
-        $("#fifthPokemon").html(playerTeam[4].name + "</br>HP: " + playerTeam[4].stats[1] + "/" + playerTeam[4].stats[0] + " " + playerTeam[4].status);
-        $("#selectBox").append("<button class=pokemon-button id=sixthPokemon>");
-        if (playerTeam[5].stats[1] == 0) {
-            $("#sixthPokemon").css({
-                "background-color": "red"
-            });
-            playerTeam[5].status = "Fainted";
-        }
-        $("#sixthPokemon").html(playerTeam[5].name + "</br>HP: " + playerTeam[5].stats[1] + "/" + playerTeam[5].stats[0] + " " + playerTeam[5].status);
         $("#selectBox").append("<button class=pokemon-button id=cancel>");
         $("#cancel").html("Cancel");
+    }
 
-        //begin button handlers
-
-        $("#firstPokemon").on("click", function () {
-            if (playerTeam[0].stats[1] > 0) {
-                playerActive = playerTeam[0];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[0].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[0].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#secondPokemon").on("click", function () {
-            if (playerTeam[1].stats[1] > 0) {
-                playerActive = playerTeam[1];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[1].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[1].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#thirdPokemon").on("click", function () {
-            if (playerTeam[2].stats[1] > 0) {
-                playerActive = playerTeam[2];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[2].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[2].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#fourthPokemon").on("click", function () {
-            if (playerTeam[3].stats[1] > 0) {
-                playerActive = playerTeam[3];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[3].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[3].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#fifthPokemon").on("click", function () {
-            if (playerTeam[4].stats[1] > 0) {
-                playerActive = playerTeam[4];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[4].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[4].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#sixthPokemon").on("click", function () {
-            if (playerTeam[5].stats[1] > 0) {
-                playerActive = playerTeam[5];
-                $("#selectBox").remove();
-                $("#log").append("</br>Go " + playerTeam[5].name + "!");
-                populate();
-            }
-            else {
-                $("#log").append("</br>" + playerTeam[5].name + " doesn't have any energy to battle.");
-            }
-        })
-
-        $("#cancel").on("click", function () {
-            if (playerActive !== undefined) {
-                if (playerActive.stats[1] !== 0) {
-                    $("#selectBox").remove();
-                }
-            }
-            else {
-                $("#log").append("</br>You must select a Pokemon to send out.");
-            }
-        })
-
-    } //end of switch pokemon function
-
-    function populate() { //populates attack buttons, image div, hp box
-        setTimeout(function () {
+    function populateImg() { //populates player sprite image
+        setTimeout(() => {
             $("#playerPokemonDisplay").html("<img id='backImg' src=" + playerActive.imageBack + ">");
             var image = new Image();
             image.src = playerActive.imageBack
@@ -964,141 +85,60 @@ $("document").ready(function () {
                     "height": height * 2.75,
                 });
             }
-            $("#playerName").html(playerActive.name);
-            $("#playerStatus").html(playerActive.status);
-            $("#playerHPbox").show();
-            $("#playerHPdisplay").html("HP: " + playerActive.stats[1] + "/" + playerActive.stats[0]);
-            $('#playerHPbar').css({
-                "width": playerActive.stats[1] / playerActive.stats[0] * 285,
-                "background-color": "green"
-            });
-            if (playerActive.stats[1] / playerActive.stats[0] <= .5) {
-                $('#playerHPbar').css({
-                    "background-color": "yellow"
-                });
+            if (oppActive == undefined) { //initializes opponents active pokemon
+                getOppActive();
+                setTimeout(populateMenu, 2000); // shows attack menu
             }
-            if (playerActive.stats[1] / playerActive.stats[0] <= .1) {
-                $('#playerHPbar').css({
-                    "background-color": "red"
-                });
+            else if (!swap) { // if player hasn't switched pokemon
+                populateMenu(); // shows attack menu
             }
-            if (oppActive == undefined) { 
-                initializeOpp(); //sets opponents active pokemon
-                setTimeout(function () {
-                    $("#menu").append("<button class=btn-default id=menuButton1>");
-                    $("#menuButton1").html(playerActive.moves[0].name);
-                    $("#menu").append("<button class=btn-default id=menuButton2>");
-                    $("#menuButton2").html(playerActive.moves[1].name);
-                    $("#menu").append("<button class=btn-default id=menuButton3>");
-                    $("#menuButton3").html(playerActive.moves[2].name);
-                    $("#menu").append("<button class=btn-default id=menuButton4>");
-                    $("#menuButton4").html(playerActive.moves[3].name);
-                    $("#menu").append("<button class=btn-default id=menuButtonSwitch>");
-                    $("#menuButtonSwitch").html("Switch Pokemon");
-                    $("#log").append("</br>Select a move.");
-                    
-            //begin attack button click events
-                    
-                    $("#menuButton1").on("click", function () {
-                        $("#log").html("");
-                        $("#menuButton1").remove();
-                        $("#menuButton2").remove();
-                        $("#menuButton3").remove();
-                        $("#menuButton4").remove();
-                        $("#menuButtonSwitch").remove();
-                        battle(0);
-                    })
-
-                    $("#menuButton2").on("click", function () {
-                        $("#log").html("");
-                        $("#menuButton1").remove();
-                        $("#menuButton2").remove();
-                        $("#menuButton3").remove();
-                        $("#menuButton4").remove();
-                        $("#menuButtonSwitch").remove();
-                        battle(1);
-                    })
-
-                    $("#menuButton3").on("click", function () {
-                        $("#log").html("");
-                        $("#menuButton1").remove();
-                        $("#menuButton2").remove();
-                        $("#menuButton3").remove();
-                        $("#menuButton4").remove();
-                        $("#menuButtonSwitch").remove();
-                        battle(2);
-                    })
-
-                    $("#menuButton4").on("click", function () {
-                        $("#log").html("");
-                        $("#menuButton1").remove();
-                        $("#menuButton2").remove();
-                        $("#menuButton3").remove();
-                        $("#menuButton4").remove();
-                        $("#menuButtonSwitch").remove();
-                        battle(3);
-                    })
-                }, 2000);
-            }
-            else {
-                $("#menu").append("<button class=btn-default id=menuButton1>");
-                $("#menuButton1").html(playerActive.moves[0].name);
-                $("#menu").append("<button class=btn-default id=menuButton2>");
-                $("#menuButton2").html(playerActive.moves[1].name);
-                $("#menu").append("<button class=btn-default id=menuButton3>");
-                $("#menuButton3").html(playerActive.moves[2].name);
-                $("#menu").append("<button class=btn-default id=menuButton4>");
-                $("#menuButton4").html(playerActive.moves[3].name);
-                $("#menu").append("<button class=btn-default id=menuButtonSwitch>");
-                $("#menuButtonSwitch").html("Switch Pokemon");
-                //begin attack button click events
-                $("#menuButton1").on("click", function () {
-                    $("#log").html("");
-                    $("#menuButton1").remove();
-                    $("#menuButton2").remove();
-                    $("#menuButton3").remove();
-                    $("#menuButton4").remove();
-                    $("#menuButtonSwitch").remove();
-                    battle(0);
-                })
-
-                $("#menuButton2").on("click", function () {
-                    $("#log").html("");
-                    $("#menuButton1").remove();
-                    $("#menuButton2").remove();
-                    $("#menuButton3").remove();
-                    $("#menuButton4").remove();
-                    $("#menuButtonSwitch").remove();
-                    battle(1);
-                })
-
-                $("#menuButton3").on("click", function () {
-                    $("#log").html("");
-                    $("#menuButton1").remove();
-                    $("#menuButton2").remove();
-                    $("#menuButton3").remove();
-                    $("#menuButton4").remove();
-                    $("#menuButtonSwitch").remove();
-                    battle(2);
-                })
-
-                $("#menuButton4").on("click", function () {
-                    $("#log").html("");
-                    $("#menuButton1").remove();
-                    $("#menuButton2").remove();
-                    $("#menuButton3").remove();
-                    $("#menuButton4").remove();
-                    $("#menuButtonSwitch").remove();
-                    battle(3);
-                })
+            else { // player switched pokemon
+                updateHPdisplay("player"); // shows new pokemon's hp box
+                setTimeout(() => {
+                    battle("switched"); // call battle to let opponent attack
+                }, 1500);
             }
         }, 1500);
     }
 
-    function initializeOpp() { //initialize oppActive and its image/hp box
-        oppActive = oppTeam[Math.floor(Math.random() * 5.99)];
+    function getOppActive() { // sets oppActive, user wins if all opponents team are fainted
+        if (oppActive == undefined) { // initialize oppActive randomly
+            oppActive = oppTeam[Math.floor(Math.random() * 6)];
+            displayOpp();
+        }
+        else { // look for pokemon with super-effective move against player, if not found send out random
+            var notFainted = [] // hold indexes of non-fainted pokemon
+            for (let i = 0; i < 6; i++) {
+                if (oppTeam[i].stats[1] != 0) { // pokemon is not fainted
+                    notFainted.push(i);
+                    var weakArray = playerActive.weaknesses.concat(playerActive.doubleWeaknesses);
+                    for (let attackNum = 0; attackNum < 4; attackNum++) { // loop through attacks
+                        if (weakArray.indexOf(oppTeam[i].moves[attackNum].type[0]) != -1) {
+                            oppActive = oppTeam[i];
+                            return displayOpp();
+                        }
+                    }
+                }
+            }
+            if (notFainted.length == 0) { // user wins if all opponents pokemon are fainted
+                setTimeout(() => {
+                    $("#log").html("");
+                    $("#log").append("Congratulations, you won!");
+                    music.pause();
+                    $(".menu-button").remove();
+                }, 3000);
+            }
+            else { // send out random non-fainted pokemon
+                oppActive = oppTeam[notFainted[Math.floor(Math.random() * notFainted.length)]];
+                displayOpp();
+            }
+        }
+    }
+
+    function displayOpp() { // sets opponents sprite image
         $("#log").append("</br>Pokemon Trainer " + oppName + " sent out " + oppActive.name + "!");
-        setTimeout(function () {
+        $("#log").scrollTop($("#log").prop("scrollHeight"));
+        setTimeout(() => {
             $("#oppPokemonDisplay").append("<img id='frontImg' src=" + oppActive.imageFront + ">");
             var image = new Image();
             image.src = oppActive.imageFront;
@@ -1108,224 +148,142 @@ $("document").ready(function () {
                     "height": height * 2,
                 });
             }
-            $("#oppName").html(oppActive.name);
-            $("#oppStatus").html(oppActive.status);
-            $("#oppHPbox").show();
-            $("#oppHPdisplay").html("HP: " + oppActive.stats[1] + "/" + oppActive.stats[0]);
-            $('#oppHPbar').css({
-                "width": oppActive.stats[1] / oppActive.stats[0] * 285,
-                "background-color": "green"
-            });
-            if (oppActive.stats[1] / oppActive.stats[0] <= .5) {
-                $('#oppHPbar').css({
-                    "background-color": "yellow"
-                });
-            }
-            if (oppActive.stats[1] / oppActive.stats[0] <= .1) {
-                $('#oppHPbar').css({
-                    "background-color": "red"
-                });
-            }
+            $("#menu").show();
+            updateHPdisplay("opponent"); // display hp box of new pokemon
         }, 1500)
-    } //end intializeOpp
-
-    function newOppActive() { //selects new pokemon opponent sends out when player defeats opponents current pokemon
-        var bool = true;
-        while (bool) {
-            var random = Math.floor(Math.random() * 5.99);
-            if (oppTeam[random].stats[1] !== 0) {
-                oppActive = oppTeam[random];
-                $("#log").append("</br>Pokemon Trainer " + oppName + " sent out " + oppActive.name + "!");
-                setTimeout(function () {
-                    $("#oppPokemonDisplay").html("<img id='frontImg' src=" + oppActive.imageFront + ">");
-                    var image = new Image();
-                    image.src = oppActive.imageFront;
-                    image.onload = function () {
-                        var height = this.naturalHeight;
-                        $('#frontImg').css({
-                            "height": height * 2,
-                        });
-                    }
-                    $("#oppName").html(oppActive.name);
-                    $("#oppStatus").html(oppActive.status);
-                    $("#oppHPbox").show();
-                    $("#oppHPdisplay").html("HP: " + oppActive.stats[1] + "/" + oppActive.stats[0]);
-                    $('#oppHPbar').css({
-                        "width": oppActive.stats[1] / oppActive.stats[0] * 285,
-                        "background-color": "green"
-                    });
-                    if (oppActive.stats[1] / oppActive.stats[0] <= .5) {
-                        $('#oppHPbar').css({
-                            "background-color": "yellow"
-                        });
-                    }
-                    if (oppActive.stats[1] / oppActive.stats[0] <= .1) {
-                        $('#oppHPbar').css({
-                            "background-color": "red"
-                        });
-                    }
-                }, 1500)
-                bool = false;
-            }
-            
-            //statement if player wins (makes all opponent's pokemon faint)
-            if (oppTeam[0].stats[1] == 0 && oppTeam[1].stats[1] == 0 && oppTeam[2].stats[1] == 0 && oppTeam[3].stats[1] == 0 && oppTeam[4].stats[1] == 0 && oppTeam[5].stats[1] == 0) {
-                bool = false;
-                setTimeout(function () {
-                    $("#log").html("");
-                    $("#log").append("Congratulations, you won!");
-                    music.pause();
-                    $("#menuButton1").remove();
-                    $("#menuButton2").remove();
-                    $("#menuButton3").remove();
-                    $("#menuButton4").remove();
-                    $("#menuButtonSwitch").remove();
-                }, 3000)
-            }
-        }
     }
 
-    function battle(playerMove) { //takes index of move as parameter
-        oppMove = oppActive.AI(); //opponent selects move
-        if (playerActive.moves[playerMove].priority == oppActive.moves[oppMove].priority) { //attack if = move priority
-            if (playerActive.stats[6] > oppActive.stats[6]) { //attack order by speed
-                if (doesItHit(playerActive, playerMove)) { //checks if attack hits successfully 
-                    attack(playerActive, oppActive, playerMove); //attack function called (damage calculation)
-                }
-                else {
-                    $("#log").append("</br>" + playerActive.name + "'s attack missed!");
-                }
-                if (oppActive.stats[1] !== 0) { //opponent attacks if player doesn't knock out pokemon on same turn
-                    if (doesItHit(oppActive, oppMove)) {
-                        attack(oppActive, playerActive, oppMove);
-                    }
-                    else {
-                        $("#log").append("</br>" + oppActive.name + "'s attack missed!");
-                    }
-                }
-                else {
-                    $("#oppPokemonDisplay").html("");
-                }
-            }
-            else { //if opponent attacks first 
-                if (doesItHit(oppActive, oppMove)) {
-                    attack(oppActive, playerActive, oppMove);
-                }
-                else {
-                    $("#log").append("</br>" + oppActive.name + "'s attack missed!");
-                }
-                if (playerActive.stats[1] !== 0) { //player sttacks if not KO'd by opponent on same turn
-                    if (doesItHit(playerActive, playerMove)) {
-                        attack(playerActive, oppActive, playerMove);
-                    }
-                    else {
-                        $("#log").append("</br>" + playerActive.name + "'s attack missed!");
-                    }
-                }
-            }
-        }
-        else if (playerActive.moves[playerMove].priority > oppActive.moves[oppMove].priority) { //if player's move priority is higher
-            if (doesItHit(playerActive, playerMove)) {
-                attack(playerActive, oppActive, playerMove);
-            }
-            else {
-                $("#log").append("</br>" + playerActive.name + "'s attack missed!");
-            }
-            if (oppActive.stats[1] !== 0) {
-                if (doesItHit(oppActive, oppMove)) {
-                    attack(oppActive, playerActive, oppMove);
-                }
-                else {
-                    $("#log").append("</br>" + oppActive.name + "'s attack missed!");
-                }
-            }
-            else {
-                $("#oppPokemonDisplay").html("");
-            }
-        }
-        else { //if player's move priority is higher
-            if (doesItHit(oppActive, oppMove)) {
-                attack(oppActive, playerActive, oppMove);
+    function battle(playerMove) { // takes index of move as parameter, conducts battle logic, user loses if all 6 pokemon faint
+        var oppMove = oppActive.AI(); // opponent selects move
+        var time = 1;
+        if (playerMove === "switched") { // opp moves after user switches pokemon
+            $("#log").append("</br>" + oppActive.name + " used " + oppActive.moves[oppMove].name + ".");
+            if (doesItHit(oppActive, oppMove)) { // check if attack hits
+                attack(oppActive, playerActive, oppMove); // calc damage
             }
             else {
                 $("#log").append("</br>" + oppActive.name + "'s attack missed!");
             }
-            if (playerActive.stats[1] !== 0) {
-                if (doesItHit(playerActive, playerMove)) {
-                    attack(playerActive, oppActive, playerMove);
+            swap = false; // reset swap
+            $("#log").scrollTop($("#log").prop("scrollHeight"));
+        }
+        // player moves first
+        else if (playerActive.moves[playerMove].priority > oppActive.moves[oppMove].priority || (playerActive.stats[6] > oppActive.stats[6] && playerActive.moves[playerMove].priority == oppActive.moves[oppMove].priority)) {
+            $("#log").append("</br>" + playerActive.name + " used " + playerActive.moves[playerMove].name + ".");
+            if (doesItHit(playerActive, playerMove)) { // check if attack hits
+                attack(playerActive, oppActive, playerMove); // calc damage
+            }
+            else {
+                $("#log").append("</br>" + playerActive.name + "'s attack missed!");
+            }
+            if (oppActive.stats[1] !== 0) { // opponent attacks if player doesn't ko pokemon on same turn
+                time++;
+                setTimeout(() => {
+                    $("#log").append("</br>" + oppActive.name + " used " + oppActive.moves[oppMove].name + ".");
+                    if (doesItHit(oppActive, oppMove)) { // check if attack hits
+                        attack(oppActive, playerActive, oppMove); // calc damage
+                    }
+                    else {
+                        $("#log").append("</br>" + oppActive.name + "'s attack missed!");
+                    }
+                }, 1500);
+            }
+        }
+        else { // opp moves first
+            $("#log").append("</br>" + oppActive.name + " used " + oppActive.moves[oppMove].name + ".");
+            if (doesItHit(oppActive, oppMove)) { // check if attack hits
+                attack(oppActive, playerActive, oppMove); // calc damage
+            }
+            else {
+                $("#log").append("</br>" + oppActive.name + "'s attack missed!");
+            }
+            if (playerActive.stats[1] !== 0) { // player sttacks if not KO'd by opponent on same turn
+                time++;
+                setTimeout(() => {
+                    $("#log").append("</br>" + playerActive.name + " used " + playerActive.moves[playerMove].name + ".");
+                    if (doesItHit(playerActive, playerMove)) { // check if attack hits
+                        attack(playerActive, oppActive, playerMove); // calc damage
+                    }
+                    else {
+                        $("#log").append("</br>" + playerActive.name + "'s attack missed!");
+                    }
+                }, 1500);
+            }
+        }
+        setTimeout(() => {
+            if (playerActive.stats[1] == 0) { // if player's pokemon faints
+                $("#log").append("</br>" + playerActive.name + " fainted!");
+                $("#log").scrollTop($("#log").prop("scrollHeight"));
+                $(".menu-button").remove();
+                $("#playerPokemonDisplay").html("");
+                if (playerTeam[0].stats[1] !== 0 || playerTeam[1].stats[1] !== 0 || playerTeam[2].stats[1] !== 0 || playerTeam[3].stats[1] !== 0 || playerTeam[4].stats[1] !== 0 || playerTeam[5].stats[1] !== 0) {
+                    selectPokemon(); // select new pokemon
                 }
-                else {
-                    $("#log").append("</br>" + playerActive.name + "'s attack missed!");
+                else { // player loses if no non-fainted pokemon to select
+                    setTimeout(() => {
+                        $("#log").html("");
+                        $("#log").append("You lost the battle!");
+                        music.pause();
+                        $(".menu-button").remove();
+                    }, 3000);
                 }
             }
-        }
-        if (playerActive.stats[1] == 0) { //if player's pokemon faints
-            $("#log").append("</br>" + playerActive.name + " fainted!");
-            unpopulate();
-            if (playerTeam[0] !== 0 && playerTeam[1] !== 0 && playerTeam[2] !== 0 && playerTeam[3] !== 0 && playerTeam[4] !== 0 && playerTeam[5] !== 0) {
-                selectPokemon();
+            else {
+                populateMenu(); // show attack buttons
             }
-            else { //player loses
-                $("#log").append("You lost the battle!");
+            if (oppActive.stats[1] == 0) { // if opponent's pokemon faints
+                $("#log").append("</br>" + oppActive.name + " fainted!");
+                $("#log").scrollTop($("#log").prop("scrollHeight"));
+                $("#oppPokemonDisplay").html("");
+                $("#menu").hide();
+                getOppActive(); // get new oppActive
             }
-        }
-        else {
-            repopulate();
-        }
-        if (oppActive.stats[1] == 0) { //if opponent's pokemon faints
-            $("#log").append("</br>" + oppActive.name + " fainted!");
-            $("#oppPokemonDisplay").html("");
-            newOppActive();
-        }
+        }, 1500 * time);
+    }
 
-    } //end of battle function
-
-
-    function doesItHit(attacker, move) { //determines if attack hits based on move's accuracy stat
-        var random = 1 + Math.random() * 99;
+    function doesItHit(attacker, move) { // determines if attack hits based on move's accuracy stat
+        var random = Math.random() * 100;
         if (random <= attacker.moves[move].accuracy) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
-    function attack(attacker, defender, move) { //calculates damage
-        $("#log").append("</br>" + attacker.name + " used " + attacker.moves[move].name + ".");
+    function attack(attacker, defender, move) { // calculates damage
         var damage;
-        var modifier = findModifier(attacker, defender, move); //calculates modifier
-        if (attacker.moves[move].type[1].indexOf("Physical") !== -1) { //determines what stats are used based on attack type
-            damage = Math.floor(((42 * attacker.moves[move].power * (attacker.stats[2] / defender.stats[3]) + 2)) / 50 * modifier);
+        var modifier = findModifier(attacker, defender, move); // calculates modifier
+        if (attacker.moves[move].type[1].indexOf("Physical") !== -1) { // physical attack type
+            damage = Math.floor((((42 * attacker.moves[move].power * (attacker.stats[2] / defender.stats[3])) / 50) + 2) * modifier);
         }
-        if (attacker.moves[move].type[1].indexOf("Special") !== -1) { //determines what stats are used based on attack type
-            damage = Math.floor(((42 * attacker.moves[move].power * (attacker.stats[4] / defender.stats[5]) + 2)) / 50 * modifier);
+        else if (attacker.moves[move].type[1].indexOf("Special") !== -1) { // special attack type
+            damage = Math.floor((((42 * attacker.moves[move].power * (attacker.stats[4] / defender.stats[5])) / 50) + 2) * modifier);
         }
-        defender.stats[1] -= damage; //reduces HP by damage
+        else { // status move
+            damage = 0;
+        }
+        defender.stats[1] -= damage; // reduces HP by damage
         if (defender.stats[1] < 0) {
-            defender.stats[1] = 0; //prevents negative HP
+            defender.stats[1] = 0; // prevents negative HP
         }
-        updateHPdisplay(defender); //updates hp display
+        updateHPdisplay(defender); // updates hp display after damage
     }
 
     //calculates increased/reduced damage based on critical hits, same type attack bonus (STAB), type matchups, status conditions, and random multiplier
-    function findModifier(attacker, defender, move) { 
+    function findModifier(attacker, defender, move) {
         var critical = 1;
-        if (1 + Math.random() * 99 <= 6.25) {
+        if (Math.random() * 100 <= 6.25) { // test critical hit
             critical = 1.5;
             $("#log").append("</br>It's a critical hit!");
         }
-        var random = Math.random() * .15 + .85;
+        var random = Math.random() * .15 + .85; // random multiplier
         var stab = 1;
-        if (attacker.moves[move].type.indexOf(attacker.types[0]) !== -1) {
-            stab = 1.5;
-        }
-        if (attacker.types.length > 1) {
-            if (attacker.moves[move].type.indexOf(attacker.types[1]) !== -1) {
+        for (let i = 0; i < attacker.types.length; i++) { // search if move type matches attack type for STAB
+            if (attacker.moves[move].type.indexOf(attacker.types[i]) !== -1) {
                 stab = 1.5;
             }
         }
         var type = 1;
+        // search type match ups for type multiplier
         if (defender.doubleWeaknesses.indexOf(attacker.moves[move].type[0]) !== -1) {
             type += 3;
             $("#log").append("</br>It's super-effective!");
@@ -1355,8 +313,11 @@ $("document").ready(function () {
         return modifier;
     }
 
-    function updateHPdisplay(target) { //updates hp display after damage
-        if (playerTeam.indexOf(target) !== -1) {
+    function updateHPdisplay(target) { // updates hp display after damage
+        if (target === "player" || playerTeam.indexOf(target) !== -1) { // update player hp box
+            $("#playerName").html(playerActive.name);
+            $("#playerStatus").html(playerActive.status);
+            $("#playerHPbox").show();
             $("#playerHPdisplay").html("HP: " + playerActive.stats[1] + "/" + playerActive.stats[0]);
             $('#playerHPbar').css({
                 "width": playerActive.stats[1] / playerActive.stats[0] * 285,
@@ -1373,7 +334,10 @@ $("document").ready(function () {
                 });
             }
         }
-        else {
+        else { // update opponent box
+            $("#oppName").html(oppActive.name);
+            $("#oppStatus").html(oppActive.status);
+            $("#oppHPbox").show();
             $("#oppHPdisplay").html("HP: " + oppActive.stats[1] + "/" + oppActive.stats[0]);
             $('#oppHPbar').css({
                 "width": oppActive.stats[1] / oppActive.stats[0] * 285,
@@ -1391,84 +355,59 @@ $("document").ready(function () {
             }
         }
     }
- 
-    function repopulate() { //repopulate attack buttons and hp display after attack phase
-        $("#playerName").html(playerActive.name);
-        $("#playerStatus").html(playerActive.status);
-        $("#playerHPbox").show();
-        $("#playerHPdisplay").html("HP: " + playerActive.stats[1] + "/" + playerActive.stats[0]);
-        $('#playerHPbar').css({
-            "width": playerActive.stats[1] / playerActive.stats[0] * 285,
-            "background-color": "green"
-        });
-        if (playerActive.stats[1] / playerActive.stats[0] <= .5) {
-            $('#playerHPbar').css({
-                "background-color": "yellow"
-            });
+
+    function populateMenu() { //populate attack buttons
+        updateHPdisplay("player");
+        for (let i = 0; i < 4; i++) {
+            $("#menu").append("<button class='btn-default menu-button' data=" + i + " id=menuButton" + (i + 1) + ">");
+            $("#menuButton" + (i + 1)).html(playerActive.moves[i].name);
         }
-        if (playerActive.stats[1] / playerActive.stats[0] <= .1) {
-            $('#playerHPbar').css({
-                "background-color": "red"
-            });
-        }
-        $("#menu").append("<button class=btn-default id=menuButton1>");
-        $("#menuButton1").html(playerActive.moves[0].name);
-        $("#menu").append("<button class=btn-default id=menuButton2>");
-        $("#menuButton2").html(playerActive.moves[1].name);
-        $("#menu").append("<button class=btn-default id=menuButton3>");
-        $("#menuButton3").html(playerActive.moves[2].name);
-        $("#menu").append("<button class=btn-default id=menuButton4>");
-        $("#menuButton4").html(playerActive.moves[3].name);
-        $("#menu").append("<button class=btn-default id=menuButtonSwitch>");
+        $("#menu").append("<button class='btn-default menu-button' data=switch id=menuButtonSwitch>");
         $("#menuButtonSwitch").html("Switch Pokemon");
-        $("#menuButton1").on("click", function () {
-            $("#log").html("");
-            $("#menuButton1").remove();
-            $("#menuButton2").remove();
-            $("#menuButton3").remove();
-            $("#menuButton4").remove();
-            $("#menuButtonSwitch").remove();
-            battle(0);
-        })
-
-        $("#menuButton2").on("click", function () {
-            $("#log").html("");
-            $("#menuButton1").remove();
-            $("#menuButton2").remove();
-            $("#menuButton3").remove();
-            $("#menuButton4").remove();
-            $("#menuButtonSwitch").remove();
-            battle(1);
-        })
-
-        $("#menuButton3").on("click", function () {
-            $("#log").html("");
-            $("#menuButton1").remove();
-            $("#menuButton2").remove();
-            $("#menuButton3").remove();
-            $("#menuButton4").remove();
-            $("#menuButtonSwitch").remove();
-            battle(2);
-        })
-
-        $("#menuButton4").on("click", function () {
-            $("#log").html("");
-            $("#menuButton1").remove();
-            $("#menuButton2").remove();
-            $("#menuButton3").remove();
-            $("#menuButton4").remove();
-            $("#menuButtonSwitch").remove();
-            battle(3);
-        })
     }
 
-    function unpopulate() { //remove attack buttons and player pokemon image
-        $("#menuButton1").remove();
-        $("#menuButton2").remove();
-        $("#menuButton3").remove();
-        $("#menuButton4").remove();
-        $("#menuButtonSwitch").remove();
-        $("#playerPokemonDisplay").html("");
-    }
+    $(document).on("click", ".menu-button", function () { // button handlers for select box buttons
+        var data = $(this).attr("data");
+        if (data === "switch") { // call select pokemon if user clicks switch
+            $(".menu-button").remove();
+            selectPokemon();
+            swap = true;
+        }
+        else { // call battle function with selected attack's value
+            $("#log").html("");
+            $(".menu-button").remove();
+            battle(parseInt(data));
+        }
+    });
 
-}) //end of document.ready
+    $(document).on("click", ".pokemon-slot", function () { // change player active when pokemon selected
+        if (playerActive != undefined && playerTeam[$(this).attr("data")].name === playerActive.name){ // prevent user from selecting same pokemon
+            return $("#log").append("</br>" + playerTeam[$(this).attr("data")].name + " is already in battle.");
+        }
+        if (playerTeam[$(this).attr("data")].stats[1] > 0) { // if not fainted
+            playerActive = playerTeam[$(this).attr("data")];
+            $("#selectBox").remove();
+            $("#log").append("</br>Go " + playerTeam[$(this).attr("data")].name + "!");
+            $("#log").scrollTop($("#log").prop("scrollHeight"));
+            populateImg(); // populate new sprite image for selected pokemon
+        }
+        else {
+            $("#log").append("</br>" + playerTeam[$(this).attr("data")].name + " doesn't have any energy left to battle.");
+        }
+    });
+
+    $(document).on("click", "#cancel", () => { // cancel player switch
+        if (playerActive !== undefined) { // prevent user from canceling if they have no active pokemon
+            if (playerActive.stats[1] !== 0) {
+                $("#selectBox").remove();
+                populateMenu();
+            }
+            else {
+                $("#log").append("</br>You must select a Pokemon to send out.");
+            }
+        }
+        else {
+            $("#log").append("</br>You must select a Pokemon to send out.");
+        }
+    });
+});
